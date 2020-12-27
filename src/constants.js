@@ -1,4 +1,4 @@
-const CANVAS_SIZE = [800, 800];
+const CANVAS_SIZE = [500, 500];
 const SNAKE_START = [
   [8, 7],
   [8, 8],
@@ -13,7 +13,7 @@ const DIRECTIONS = {
   39: [1, 0], // right
 };
 
-export {
+export default {
   CANVAS_SIZE,
   SNAKE_START,
   APPLE_START,

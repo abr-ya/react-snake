@@ -31,16 +31,15 @@ const App = () => {
     keyCode >= 37 && keyCode <= 40 && setDir(DIRECTIONS[keyCode])
   );
 
-  const newApple = () => {
+  const newApple = () => (
+    apple.map((_, i) => Math.floor((Math.random() * CANVAS_SIZE[i]) / SCALE))
+  );
 
-  };
+  // скушали яблоко?
+  const isApple = (piece) => (piece[0] === apple[0] && piece[1] === apple[1]);
 
-  const getApple = () => {
-
-  };
-
-  // врезулись в границу?
-  const isBorder = (piece, snk = snake) => (
+  // врезались в границу?
+  const isBorder = (piece) => (
     piece[0] * SCALE >= CANVAS_SIZE[0]
       || piece[1] * SCALE >= CANVAS_SIZE[1]
       || piece[0] < 0 || piece[1] < 0
@@ -54,15 +53,19 @@ const App = () => {
     snake.forEach(([x, y]) => context.fillRect(x, y, 1, 1));
     context.fillStyle = 'blue';
     context.fillRect(apple[0], apple[1], 1, 1);
-  }, [snake, apple, gameOver]);
+  }, [snake, apple, gameOver, SCALE, CANVAS_SIZE]);
 
   // шаг игры
   const gameLoop = () => {
     const snakeCopy = JSON.parse(JSON.stringify(snake));
     const newSnakeHead = [snakeCopy[0][0] + dir[0], snakeCopy[0][1] + dir[1]];
     if (isBorder(newSnakeHead)) endGame();
+    if (isApple(newSnakeHead)) {
+      setApple(newApple());
+    } else {
+      snakeCopy.pop(); // удалить хвост
+    }
     snakeCopy.unshift(newSnakeHead); // добавить голову
-    snakeCopy.pop(); // удалить хвост
     setSnake(snakeCopy);
   };
 
